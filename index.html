@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090d12">
+  <meta name="description" content="一场关于归来的交互式演示。重温超级重型助推器被发射塔机械筷子捕获的瞬间。">
+  <title>归来 · THE CATCH — 星舰筷子捕获</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d12'/%3E%3Cpath d='M29 10h6v34h-6zM12 27h5v27h-5zm5 17h12v5H17zm18 0h12v5H35z' fill='%23ff713f'/%3E%3C/svg%3E">
+  <style>
+    :root{color-scheme:dark;--bg:#090d12;--ink:#f2f3f3;--muted:#9ca4ae;--line:rgba(223,230,239,.15);--accent:#ff7748;--mono:'Cascadia Code','SFMono-Regular',Consolas,monospace;--sans:Inter,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans)}button,a,input,select{-webkit-tap-highlight-color:transparent}button,a,input,select:focus-visible{outline:2px solid var(--accent);outline-offset:6px}button{font:inherit;cursor:pointer}button,a{touch-action:manipulation}button{color:inherit}a{color:inherit;text-decoration:none}button:disabled{cursor:default}button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;flex:none}button .solid{fill:currentColor;stroke:none}
+    .experience{position:relative;isolation:isolate;min-height:840px;height:100svh;overflow:hidden;background:#090d12}
+    #scene{position:absolute;inset:0;width:100%;height:100%;z-index:-2}
+    .shade{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(9,13,18,.92),rgba(9,13,18,.5) 31%,transparent 57%),linear-gradient(0deg,#090d12 0%,transparent 28%)}
+    .grain{position:absolute;inset:0;pointer-events:none;z-index:6;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' opacity='.5' d='M0 0h180v180H0z'/%3E%3C/svg%3E")}
+    header{height:94px;margin:0 4.5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:24px}
+    .wordmark{display:flex;align-items:center;gap:13px;font-weight:600;font-size:17px;letter-spacing:.19em}.mark{width:28px;height:28px;position:relative}.mark:before,.mark:after{content:'';position:absolute;width:2px;height:24px;background:var(--accent);top:2px;transform:rotate(23deg)}.mark:before{left:9px}.mark:after{right:8px;transform:rotate(-23deg)}.mark i{position:absolute;top:15px;left:1px;width:27px;height:2px;background:var(--accent)}
+    .header-center{font:12px var(--mono);letter-spacing:.19em;color:#8f9aa7;display:flex;align-items:center;gap:15px}.header-center span:first-child{color:#d0d6dc}.header-center b{font-weight:400;color:#56606d}
+    .about-link{font-size:14px;display:flex;align-items:center;gap:12px;color:#c3c9cf;background:none;border:none;padding:10px 0}.about-link svg{width:17px}
+    .hero{position:absolute;top:24%;left:4.5%;width:41%;max-width:590px}.eyebrow{display:flex;align-items:center;gap:11px;color:var(--accent);font:12px var(--mono);letter-spacing:.17em}.eyebrow:before{content:'';width:22px;height:1px;background:var(--accent)}
+    h1{font-weight:500;font-size:clamp(52px,5.6vw,90px);letter-spacing:-.055em;line-height:1.14;margin:24px 0 16px}h1 span{display:block;color:var(--accent)}.english-title{font:12px var(--mono);letter-spacing:.35em;color:#a4adb8;margin:22px 0 30px}.intro{font-size:16px;line-height:1.95;color:#a3adb8;margin:0;max-width:370px}.hero-actions{display:flex;align-items:center;gap:23px;margin-top:32px}.primary{border:1px solid var(--accent);background:var(--accent);color:#111419;padding:15px 23px;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-width:158px;font-size:14px;font-weight:600;transition:background .2s,transform .2s}.primary:hover{background:#ff986f;transform:translateY(-2px)}.text-button{background:none;border:0;padding:12px 0;display:inline-flex;align-items:center;gap:9px;color:#b7bfc9;font-size:14px}.text-button:hover{color:#fff}.hero-caption{margin:31px 0 0;font:12px var(--mono);color:#6f7b89;letter-spacing:.06em}
+    .stage-tag{position:absolute;left:56.5%;top:17.5%;font:12px var(--mono);letter-spacing:.12em;color:#96a4b2;display:flex;align-items:center;gap:10px}.stage-tag .record{height:5px;width:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px #ff774855}.stage-tag small{color:#667380;font-size:11px;margin-left:13px}
+    .telemetry{position:absolute;right:4.5%;top:34%;width:118px}.metric{padding:0 0 24px;margin-bottom:24px;border-bottom:1px solid var(--line)}.metric:last-child{border:none}.metric-label{font-size:12px;color:#8c9aa8;display:block;margin-bottom:10px}.metric-value{font:30px var(--mono);letter-spacing:-.06em;font-weight:300;white-space:nowrap}.metric-value small{font-size:12px;letter-spacing:0;color:#8c9aa8;margin-left:7px}.metric-sub{display:block;font:10px var(--mono);letter-spacing:.12em;color:#576674;margin-top:8px}.engine-row{display:flex;gap:6px;margin-top:15px}.engine-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px #ff774866}.engine-dot.off{background:#3d4a55;box-shadow:none}
+    .annotation{position:absolute;left:72.4%;top:66%;display:flex;align-items:center;gap:8px;font:11px var(--mono);color:#acb4bc;letter-spacing:.08em;pointer-events:none;transition:opacity .3s}.annotation:before{content:'';height:1px;width:36px;background:#81858b}.annotation small{color:var(--accent);font-size:11px}
+    .view-controls{position:absolute;left:56.5%;bottom:195px;display:flex;align-items:center;border:1px solid var(--line);padding:4px;background:#0c111780;backdrop-filter:blur(12px)}.view-controls button{border:0;background:none;color:#7d8b99;font-size:12px;padding:8px 14px}.view-controls button.active{background:#dde5ef13;color:#e5e9ed}
+    .mission-footer{position:absolute;left:4.5%;right:4.5%;bottom:25px}.status-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:21px;gap:20px}.mission-status{font-size:14px;display:flex;gap:12px;align-items:center}.status-indicator{width:6px;height:6px;background:var(--accent);border-radius:50%}.status-indicator.caught{background:#c3ddb7;box-shadow:0 0 16px #c3ddb744}.status-en{font:11px var(--mono);color:#657687;letter-spacing:.1em;margin-left:6px}.simulation-note{font-size:12px;color:#73808d;display:flex;align-items:center;gap:9px}.simulation-note:before{content:'';width:4px;height:4px;border:1px solid #73808d;border-radius:50%}
+    .timeline{position:relative;height:27px;display:flex;align-items:center}.timeline-track{height:2px;background:#333e49;width:100%;pointer-events:none}.timeline-fill{position:absolute;left:0;height:2px;background:var(--accent);width:0;pointer-events:none}.timeline input{position:absolute;inset:0;width:100%;height:27px;margin:0;opacity:0;cursor:pointer}.timeline-knob{position:absolute;left:0;width:8px;height:8px;border-radius:50%;background:var(--accent);transform:translateX(-50%);box-shadow:0 0 18px #ff774833;pointer-events:none}.timeline:focus-within{outline:1px solid #ff774866;outline-offset:5px}.timeline-labels{display:flex;justify-content:space-between;margin:0 0 23px;font-size:12px;color:#73808e}.timeline-labels button{background:none;border:0;color:inherit;font:inherit;padding:5px 0;display:flex;gap:10px}.timeline-labels button span{font:11px var(--mono);color:#4e5c6b}.timeline-labels button.current{color:#d5dbe0}.timeline-labels button:hover{color:var(--accent)}
+    .transport{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:16px;gap:20px}.transport-left,.transport-right{display:flex;align-items:center;gap:22px}.icon-btn{border:0;background:none;padding:6px;color:#c9d1d9;display:flex;align-items:center;justify-content:center}.icon-btn:hover{color:var(--accent)}.timecode{font:12px var(--mono);letter-spacing:.06em;color:#aeb8c1}.timecode span{color:#596675;margin-left:8px}.speed{font:12px var(--mono);color:#aeb8c1;min-width:35px}.key-hint{font-size:11px;color:#526271;display:flex;gap:8px;align-items:center}.key-hint kbd{border:1px solid #34414f;padding:2px 7px;font:10px var(--mono)}.edition{font:10px var(--mono);color:#5d6a78;letter-spacing:.13em}.fullscreen{gap:8px;font-size:12px}.completed-badge{position:absolute;left:63.8%;top:25%;text-align:center;opacity:0;transform:translateY(10px);transition:opacity .7s,transform .7s;pointer-events:none}.completed-badge.visible{opacity:1;transform:none}.completed-badge p{color:#b9d2ac;font:12px var(--mono);letter-spacing:.18em;margin:0 0 8px}.completed-badge span{color:#a7b1ba;font-size:12px}
+    dialog{color:var(--ink);background:#101820;border:1px solid #34404c;max-width:570px;width:calc(100% - 36px);padding:36px}dialog::backdrop{background:#02060bc9;backdrop-filter:blur(9px)}dialog h2{font-size:27px;font-weight:500;margin:18px 0 22px}dialog p{font-size:16px;line-height:1.9;color:#a7b2bf}dialog .dialog-eyebrow{font:11px var(--mono);color:var(--accent);letter-spacing:.16em}dialog .close{position:absolute;right:18px;top:18px}dialog .fact-row{display:flex;gap:28px;border-top:1px solid var(--line);padding:20px 0 5px;margin-top:25px}dialog .fact-row b{display:block;color:#e0e5e8;font:18px var(--mono);margin-bottom:7px}dialog .fact-row span{font-size:12px;color:#788997}dialog .fine{font-size:12px;color:#738594;line-height:1.8}.toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);opacity:0;background:#17212b;border:1px solid #3f4e5b;padding:12px 20px;font-size:13px;z-index:10;transition:.3s;pointer-events:none;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(min-width:1800px){.hero{top:26%}.view-controls{bottom:220px}.mission-footer{bottom:32px}.intro{font-size:18px}}
+    @media(max-width:1100px) and (min-width:701px){.experience{min-height:800px}.hero{width:43%;top:23%}h1{font-size:62px}.intro{max-width:300px;font-size:14px}.hero-actions{gap:15px}.telemetry{right:3.5%;width:90px}.metric-value{font-size:25px}.stage-tag{left:55%;top:16%}.annotation{left:72%;font-size:10px}.header-center{display:none}.shade{background:linear-gradient(90deg,#090d12e8,transparent 62%),linear-gradient(0deg,#090d12,transparent 30%)}.status-en{display:none}.key-hint{display:none}}
+    @media(max-width:700px){.experience{height:auto;min-height:1080px;height:max(1080px,100svh)}header{height:75px;margin:0 6%}.wordmark{font-size:14px}.header-center{display:none}.about-link{font-size:12px}.hero{top:111px;left:6%;width:88%;max-width:none}.eyebrow{font-size:10px}h1{font-size:52px;line-height:1.12;margin:18px 0 12px}h1 span{display:inline;margin-left:10px}.english-title{font-size:10px;margin:16px 0 17px;letter-spacing:.29em}.intro{font-size:14px;line-height:1.8;max-width:320px}.hero-actions{margin-top:21px;gap:24px}.primary{padding:12px 18px;min-width:135px}.hero-caption{display:none}.shade{background:linear-gradient(180deg,#090d12 0%,#090d12e0 33%,transparent 46%,transparent 72%,#090d12 85%)}.stage-tag{top:430px;left:6%;font-size:10px}.stage-tag small{font-size:9px}.telemetry{top:505px;right:6%;width:78px}.metric{padding-bottom:15px;margin-bottom:17px}.metric-label{font-size:10px;margin-bottom:8px}.metric-value{font-size:22px}.metric-value small{font-size:10px;margin-left:3px}.metric-sub{font-size:8px}.engine-row{gap:5px;margin-top:11px}.engine-dot{width:5px;height:5px}.annotation{left:53%;top:759px;font-size:9px;gap:5px}.annotation:before{width:20px}.annotation small{font-size:9px}.view-controls{left:6%;bottom:216px}.view-controls button{font-size:11px;padding:7px 12px}.mission-footer{left:6%;right:6%;bottom:23px}.status-row{margin-bottom:16px;align-items:flex-start}.mission-status{font-size:12px;gap:8px}.status-en{display:none}.simulation-note{font-size:10px;max-width:110px;text-align:right;line-height:1.5}.simulation-note:before{display:none}.timeline-labels{margin-bottom:19px;font-size:10px}.timeline-labels button{gap:3px;flex-direction:column}.timeline-labels button:last-child{align-items:flex-end}.timeline-labels button span{font-size:9px}.transport-left{gap:16px}.transport-right{gap:12px}.edition,.key-hint{display:none}.fullscreen span{display:none}.timecode{font-size:11px}.completed-badge{left:36%;top:490px}.completed-badge p{font-size:10px}.completed-badge span{font-size:10px}dialog{padding:29px}.toast{font-size:12px;max-width:92%;white-space:normal}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<main class="experience" id="experience">
+  <canvas id="scene" aria-label="超级重型助推器垂直下降，被发射塔的两根机械臂捕获的三维感动画"></canvas>
+  <div class="shade"></div><div class="grain"></div>
+  <header>
+    <a href="#" class="wordmark" aria-label="归来，回到开头"><span class="mark" aria-hidden="true"><i></i></span>THE CATCH<span style="color:#627080;font-weight:300;letter-spacing:0">/</span></a>
+    <div class="header-center"><span>SUPER HEAVY</span><b>/</b><span>RETURN TO THE TOWER</span></div>
+    <button class="about-link" id="aboutBtn">关于这次捕获 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 10v7m0-10v1"/></svg></button>
+  </header>
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="eyebrow">A RETURN LIKE NO OTHER</div>
+    <h1 id="heroTitle">向上探索。<span>向家归来。</span></h1>
+    <p class="english-title">THE ART OF COMING BACK.</p>
+    <p class="intro">数十层楼高的助推器，从天空缓缓落下。<br>两根机械「筷子」，接住奔向太空的野心。</p>
+    <div class="hero-actions">
+      <button class="primary" id="heroPlay"><svg viewBox="0 0 24 24"><path class="solid" d="m8 5 12 7-12 7z"/></svg><span>重温捕获瞬间</span></button>
+      <button class="text-button" id="detailsBtn"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>了解捕获原理</button>
+    </div>
+    <p class="hero-caption">SUPER HEAVY × MECHAZILLA</p>
+  </section>
+  <div class="stage-tag"><span class="record"></span>SIMULATION <small>CAM 01 / STARBASE</small></div>
+  <aside class="telemetry" aria-label="模拟遥测">
+    <div class="metric"><span class="metric-label">相对捕获点高度</span><div class="metric-value"><span id="altitude">248</span><small>m</small></div><span class="metric-sub">RELATIVE ALTITUDE</span></div>
+    <div class="metric"><span class="metric-label">下降速度</span><div class="metric-value"><span id="velocity">24.8</span><small>m/s</small></div><span class="metric-sub">DESCENT VELOCITY</span></div>
+    <div class="metric"><span class="metric-label">发动机状态</span><div class="metric-value" id="engineState" style="font-size:19px;letter-spacing:0">制动中</div><div class="engine-row" aria-hidden="true"><i class="engine-dot"></i><i class="engine-dot"></i><i class="engine-dot"></i></div><span class="metric-sub">RAPTOR ENGINES</span></div>
+  </aside>
+  <div class="annotation" id="annotation">MECHAZILLA <small>/ 筷子捕获臂</small></div>
+  <div class="completed-badge" id="completeBadge"><p>CAPTURE CONFIRMED</p><span>欢迎回家。</span></div>
+  <div class="view-controls" role="group" aria-label="镜头视角"><button class="active" id="wideBtn" aria-pressed="true">全景视角</button><button id="closeBtn" aria-pressed="false">捕获特写</button></div>
+  <section class="mission-footer" aria-label="动画控制">
+    <div class="status-row"><div class="mission-status"><i class="status-indicator" id="statusLight"></i><span id="statusText" aria-live="polite">返回 · 下降接近</span><span class="status-en" id="statusEn">CONTROLLED DESCENT</span></div><div class="simulation-note">艺术化演示 · 非真实遥测</div></div>
+    <div class="timeline"><div class="timeline-track"></div><div class="timeline-fill" id="progressFill"></div><div class="timeline-knob" id="progressKnob"></div><input type="range" id="scrubber" min="0" max="20000" step="10" value="0" aria-label="捕获动画进度" aria-valuetext="0 秒，共 20 秒"></div>
+    <div class="timeline-labels"><button data-time="0" class="current"><span>00:00</span>返回接近</button><button data-time="7000"><span>00:07</span>着陆制动</button><button data-time="14000"><span>00:14</span>机械臂捕获</button><button data-time="18000"><span>00:18</span>稳稳归来</button></div>
+    <div class="transport"><div class="transport-left"><button class="icon-btn" id="playBtn" aria-label="暂停动画" title="播放 / 暂停（空格）"><svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="3"/></svg></button><button class="icon-btn" id="replayBtn" aria-label="从头重播" title="重播（R）"><svg viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 0 5M4 4v6h6"/></svg></button><div class="timecode"><b id="elapsed" style="font-weight:400">00:00</b><span>/ 00:20</span></div><button class="icon-btn speed" id="speedBtn" title="切换播放速度" aria-label="播放速度 1 倍">1×</button><span class="key-hint"><kbd>SPACE</kbd>暂停 / 播放</span></div><div class="transport-right"><span class="edition">A MOMENT IN SPACE EXPLORATION</span><button class="icon-btn fullscreen" id="fullBtn" aria-label="进入全屏"><svg viewBox="0 0 24 24"><path d="M4 9V4h5m6 0h5v5M4 15v5h5m6 0h5v-5"/></svg><span>全屏体验</span></button></div></div>
+  </section>
+</main>
+<dialog id="aboutDialog" aria-labelledby="aboutTitle"><button class="icon-btn close" data-close aria-label="关闭"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button><span class="dialog-eyebrow">SUPER HEAVY / MECHAZILLA</span><h2 id="aboutTitle">接住一枚火箭。</h2><p>你看到的是 SpaceX 星舰系统的「超级重型」助推器返回演示。完成上升任务后，助推器返回发射场，由塔架上的两根大型机械臂接住。</p><p>这些机械臂被形象地称作「筷子」。助推器通过发动机控制下降、调整位置，捕获臂在接近时对准支承位置，最终承载助推器的重量。</p><div class="fact-row"><div><b>SUPER HEAVY</b><span>返回的助推器</span></div><div><b>MECHAZILLA</b><span>发射塔与机械臂系统</span></div></div><p class="fine">本页面是独立制作的艺术化可视化，并非 SpaceX 官方页面。轨迹、时间、尺寸比例与遥测数值均为演示设定，不代表实际飞行数据。</p></dialog>
+<div class="toast" id="toast" role="status"></div>
+<noscript><p style="position:fixed;bottom:10px;padding:20px;background:#131b25">请启用 JavaScript，以观看筷子捕获动画。</p></noscript>
+<script>
+(() => {
+  'use strict';
+  const $=id=>document.getElementById(id), canvas=$('scene'),ctx=canvas.getContext('2d');
+  const duration=20000, reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const state={time:0,playing:!reduced,speed:1,zoom:1,targetZoom:1,last:0,uiLast:0,width:0,height:0,dpr:1};
+  const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+  const mix=(a,b,t)=>a+(b-a)*t;
+  const smooth=t=>{t=clamp(t);return t*t*(3-2*t)};
+  const seeded=n=>{const x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+  function resize(){state.width=innerWidth;state.height=$('experience').clientHeight;state.dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(state.width*state.dpr);canvas.height=Math.round(state.height*state.dpr)}
+  new ResizeObserver(resize).observe($('experience'));resize();
+  function path(points,fill,stroke,width=1){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke()}}
+  function line(x,y,x2,y2,color,width=1){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x2,y2);ctx.stroke()}
+  function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}
+  function ellipse(x,y,rx,ry,color){ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill()}
+  function gradient(x,y,x2,y2,stops){const g=ctx.createLinearGradient(x,y,x2,y2);stops.forEach(([o,c])=>g.addColorStop(o,c));return g}
+  function glow(x,y,r,color){const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,color);g.addColorStop(1,'rgba(255,100,40,0)');ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2)}
+  function pose(ms){const p=ms/duration;let offset=0,velocity=0;if(p<.7){const t=p/.7;offset=248*Math.pow(1-t,1.65);velocity=29.23*Math.pow(1-t,.65)}const close=smooth((p-.59)/.17);const shut=smooth((p-.78)/.065);return{p,offset,velocity,close,fire:1-shut,caught:p>=.845,settle:Math.sin(clamp((p-.79)/.09)*Math.PI)*1.3}}
+  function drawSky(w,h,t){
+    ctx.fillStyle=gradient(0,0,w*.8,h,[[0,'#080e16'],[.45,'#121e2c'],[.72,'#283743'],[.9,'#77625b'],[1,'#3b3537']]);ctx.fillRect(0,0,w,h);
+    const mobile=w<=700, horizon=mobile?790:h*.775;
+    const sun=ctx.createRadialGradient(w*.74,horizon+30,10,w*.74,horizon+30,w*.48);sun.addColorStop(0,'#eaa97624');sun.addColorStop(.4,'#eaa97609');sun.addColorStop(1,'#eaa97600');ctx.fillStyle=sun;ctx.fillRect(0,0,w,h);
+    for(let i=0;i<80;i++){const x=seeded(i+1)*w,y=seeded(i+201)*h*.6;const a=(.16+seeded(i+104)*.3)*(1-y/h);ellipse(x,y,seeded(i+20)*.75+.2,seeded(i+20)*.75+.2,`rgba(213,228,242,${a})`)}
+    ctx.save();ctx.globalAlpha=.32;for(let i=0;i<16;i++){let y=horizon-220+seeded(i+350)*230;let x=seeded(i+400)*w;const cloud=ctx.createRadialGradient(x,y,0,x,y,w*.28);cloud.addColorStop(0,i%2?'#acb9c714':'#ebc0a214');cloud.addColorStop(1,'#ffffff00');ctx.save();ctx.translate(x,y);ctx.scale(1,.08);ctx.fillStyle=cloud;ctx.fillRect(-w*2,-h*3,w*4,h*6);ctx.restore()}ctx.restore();
+    const mountain=[];mountain.push([0,horizon+5]);for(let x=0;x<=w+10;x+=12){mountain.push([x,horizon+Math.sin(x*.009)*6+seeded(x)*9])}mountain.push([w,h],[0,h]);path(mountain,'#172028');
+    rect(0,horizon+35,w,h-horizon,'#111a22');line(0,horizon+36,w,horizon+36,'#b1a28a18');
+    for(let i=0;i<32;i++){const x=seeded(i+700)*w,y=horizon-4;rect(x,y-4-seeded(i+200)*12,2+seeded(i+64)*25,12,'#14202a');if(i%3===0)rect(x,y-6,2,2,'#f9c89988')}
+  }
+  function drawGround(){
+    path([[-640,14],[-270,-16],[310,-6],[660,80],[-640,80]],'#101920');
+    for(let i=0;i<8;i++)line(-620,17+i*8,600,40+i*13,'#65727a10');
+    for(let i=-7;i<10;i++)line(i*95,7,i*145+100,85,'#65727a10');
+    path([[-337,3],[-110,-16],[134,12],[-42,48]],'#28333b','#72818b28');
+    path([[-337,3],[-337,12],[-42,57],[-42,48]],'#141d25');
+    path([[-42,48],[134,12],[134,20],[-42,57]],'#1a242d');
+    // distant tanks and buildings
+    for(let i=0;i<5;i++){const x=235+i*27;rect(x,-58,19,64,'#24303a');ellipse(x+9.5,-58,9.5,4,'#4b565b');ellipse(x+9.5,6,9.5,4,'#1b252e');line(x+4,-55,x+4,4,'#61717d33');}
+    path([[200,-13],[225,-23],[360,-15],[360,8],[200,0]],'#26323a');
+    rect(-400,-22,70,30,'#1c2933');path([[-400,-22],[-382,-33],[-313,-29],[-330,-17]],'#34414a');
+    for(let i=0;i<12;i++){rect(-412+i*56,19+i*1.6,2,3,i%3?'#ffb47555':'#ffbf7daa')}
+    ellipse(-30,25,77,8,'#f89a6a0b');
+  }
+  function drawTower(){
+    const x=-220,y=-583,height=583;
+    // dimensional lattice tower: rear face first
+    path([[x+58,y-10],[x+90,y-26],[x+90,-12],[x+58,0]],'#17232e','#7a8d9e55');
+    rect(x,y,59,height,'#1a2833');
+    for(let i=0;i<10;i++){const yy=y+i*58;rect(x+3,yy+3,52,52,'#0e1923');path([[x+59,yy+2],[x+86,yy-11],[x+86,yy+41],[x+59,yy+54]],'#111e28');line(x+3,yy+4,x+55,yy+55,'#788692',2);line(x+55,yy+4,x+3,yy+55,'#495d6d',2);line(x+61,yy+4,x+85,yy+39,'#405567',1.8);line(x+85,yy-8,x+61,yy+51,'#405567',1.8);rect(x-5,yy,65,5,'#7a868c');line(x-5,yy+1,x+60,yy+1,'#bcc0b77a');path([[x+60,yy],[x+90,yy-15],[x+90,yy-10],[x+60,yy+5]],'#566877')}
+    rect(x-3,y,6,height,'#8a9292');rect(x+53,y,7,height,'#8e9899');rect(x+84,y-25,5,height,'#546876');
+    // vertical service pipes and cable rails
+    rect(x+15,y,4,height,'#64727a');rect(x+22,y,2,height,'#90928a');rect(x+32,y,4,height,'#485761');
+    for(let i=0;i<64;i++)line(x+39,y+i*9,x+49,y+i*9,'#a3a69966',1);
+    line(x+39,y,x+39,0,'#bcc1bb66');line(x+49,y,x+49,0,'#bcc1bb66');
+    // crown and crane
+    path([[x-9,y-7],[x+60,y-7],[x+97,y-27],[x+24,y-27]],'#6a7b87','#b5baba55');rect(x-9,y-7,70,12,'#526673');
+    line(x+12,y-25,x+12,y-70,'#71828f',3);line(x+12,y-70,x+75,y-23,'#8c969c',2);line(x-25,y-77,x+115,y-77,'#a8aca5',4);line(x-25,y-86,x+115,y-86,'#4e6576',2);for(let i=0;i<13;i++)line(x-25+i*11,y-86,x-15+i*11,y-77,'#6b7c89');line(x+12,y-70,x-20,y-80,'#bcc2ba55');line(x+12,y-70,x+115,y-80,'#bcc2ba55');line(x+112,y-77,x+112,y-25,'#6d7f8d');
+    // tower warning lights
+    for(let i=0;i<4;i++){const yy=y+20+i*152;ellipse(x-4,yy,1.8,1.8,'#ff845b');glow(x-4,yy,10,'#ff6b4333')}
+    // feet
+    path([[x-7,-15],[x+9,-15],[x+20,9],[x-21,12]],'#4b5a61');path([[x+49,-15],[x+62,-15],[x+83,8],[x+50,13]],'#55636b');
+  }
+  function drawArm(p,front){
+    const gap=mix(85,30,p.close),dy=front?14:-16;
+    const rootX=-151,rootY=-510+dy,tipX=front?gap:-gap;
+    const A=[rootX,rootY],B=[tipX,rootY+30],C=[tipX+2,rootY+42],D=[rootX,rootY+15];
+    path([A,B,C,D],front?'#7c8a90':'#394d5c',front?'#bfc2b777':'#89979b55',1.1);
+    path([[rootX,rootY-8],[tipX,rootY+21],B,A],front?'#a4aaa5':'#71828d');
+    for(let i=0;i<7;i++){const t=i/7,t2=(i+1)/7;const ax=mix(rootX,tipX,t),bx=mix(rootX,tipX,t2),ay=mix(rootY,rootY+30,t),by=mix(rootY,rootY+30,t2);line(ax,ay+1,bx,by+13,'#172b39',1.7);line(ax,ay+12,bx,by+1,'#2e4351',1.3)}
+    line(rootX,rootY-8,tipX,rootY+21,'#d0cbc3a0');
+    // contact saddle at arm tip
+    path([[tipX-9,rootY+17],[tipX+7,rootY+19],[tipX+8,rootY+37],[tipX-9,rootY+35]],'#a3aaa4','#d5c2a277');
+    rect(-167,rootY-20,20,55,'#566b79');for(let i=0;i<5;i++)line(-166,rootY-11+i*9,-149,rootY-11+i*9,'#9dabae55');
+    line(rootX+4,rootY+18,rootX+55,rootY+65,'#718592',5);line(rootX+17,rootY+31,rootX+57,rootY+66,'#b0b9b4',2);
+  }
+  function drawPlume(y,p,time){
+    if(p.fire<.01)return;
+    ctx.save();ctx.globalCompositeOperation='screen';let pulse=1+Math.sin(time*.047)*.045+Math.sin(time*.113)*.025;
+    const power=mix(1,.47,smooth((p.p-.4)/.35))*p.fire;
+    glow(0,y+65,160*power,'#ff864331');glow(0,y+13,67*power,'#ffc18b73');
+    for(let i=-1;i<=1;i++){const x=i*13;const len=(112+(i?0:42))*power*pulse;
+      ctx.fillStyle=gradient(x,y,x,y+len,[[0,'#e2edff'],[.14,'#dbe3ffff'],[.42,'#ffbf85e8'],[.7,'#ff81364d'],[1,'#ff6b2000']]);ctx.beginPath();ctx.moveTo(x-7,y);ctx.bezierCurveTo(x-13,y+len*.34,x-5,y+len*.8,x+Math.sin(time*.06+i)*4,y+len);ctx.bezierCurveTo(x+7,y+len*.6,x+13,y+len*.3,x+7,y);ctx.fill();
+      for(let j=0;j<4;j++){const yy=y+12+j*17*power;path([[x,yy-4*power],[x+5*power,yy],[x,yy+7*power],[x-5*power,yy]],'#fff6e5a0')}
+    }ctx.restore();
+  }
+  function drawBooster(p,time){
+    const y=-524-p.offset*.94+p.settle,bodyH=374;
+    ctx.save();ctx.translate(Math.sin(p.p*14)*Math.pow(1-p.p,2)*4,y);
+    // rear grid fin
+    path([[-24,34],[-69,29],[-78,47],[-27,53]],'#263b49','#788c96',1);for(let i=0;i<7;i++)line(-71+i*6,31,-75+i*7,49,'#9ba9ad88',1.3);
+    // engine skirt silhouette
+    path([[-25,bodyH-21],[26,bodyH-21],[30,bodyH+2],[-29,bodyH+2]],'#242b30','#657077');
+    const body=gradient(-29,0,31,0,[[0,'#304555'],[.12,'#8498a1'],[.24,'#c0c9c5'],[.39,'#8f9e9f'],[.58,'#5c727f'],[.82,'#283c4c'],[.97,'#132838'],[1,'#6a8088']]);
+    ctx.fillStyle=body;ctx.beginPath();ctx.moveTo(-29,bodyH-11);ctx.lineTo(-29,15);ctx.quadraticCurveTo(-29,0,-17,-4);ctx.quadraticCurveTo(0,-9,17,-4);ctx.quadraticCurveTo(29,0,29,15);ctx.lineTo(29,bodyH-11);ctx.quadraticCurveTo(0,bodyH+1,-29,bodyH-11);ctx.fill();
+    // brushed steel ring welds, longitudinal reflections
+    for(let j=0;j<26;j++){const yy=18+j*13;ctx.beginPath();ctx.ellipse(0,yy,29,3.8,0,0,Math.PI);ctx.strokeStyle=j%4?'#c9d0c329':'#ccd2c35c';ctx.lineWidth=j%4?.5:1;ctx.stroke();line(-28,yy,28,yy,'#0c213026',.5)}
+    for(let i=0;i<13;i++){const x=-26+i*4.2;line(x,17,x,bodyH-16,`rgba(221,228,219,${.012+seeded(i+21)*.03})`,1)}
+    rect(-22,73,3,210,'#dfdbbb33');rect(-17,73,1,210,'#e1dbc752');rect(20,33,3,bodyH-53,'#142b3b9c');
+    path([[-29,22],[29,22],[29,40],[-29,40]],'#1f303bd9');line(-29,22,29,22,'#d7d9c17a');
+    ellipse(0,1,19,4,'#a6b3b1');ellipse(0,0,17,3,'#516674');rect(-7,-13,14,13,'#6a7f88');ellipse(0,-13,7,2.5,'#a8b5b3');
+    // front grid fins, articulated black lattice
+    for(const dir of [-1,1]){const x=dir*27,tx=dir*58;path([[x,38],[tx,49],[tx,71],[x,56]],'#233947','#c5c8ba99',1);for(let i=0;i<6;i++){const xx=mix(x,tx,i/5),yy=mix(38,49,i/5);line(xx,yy,xx,yy+19,'#b9c2ba99',1.2)}for(let i=0;i<4;i++)line(x,39+i*5,tx,50+i*5,'#81979f',1);}
+    // small marking, visible only at close range
+    ctx.save();ctx.translate(6,126);ctx.rotate(Math.PI/2);ctx.fillStyle='#1a3040';ctx.font='bold 7px Arial';ctx.letterSpacing='2px';ctx.fillText('SUPER HEAVY',0,0);ctx.restore();
+    path([[-27,bodyH-43],[28,bodyH-43],[29,bodyH-9],[-29,bodyH-9]],'#1a2c36bb');
+    for(let i=-2;i<=2;i++){const x=i*10;path([[x-3,bodyH-6],[x+3,bodyH-6],[x+5,bodyH+4],[x-5,bodyH+4]],'#101d25','#77808788');ellipse(x,bodyH+4,4.5,1.8,p.fire>.1?'#f8c99c':'#2b353b')}
+    if(p.fire>.01){ctx.globalCompositeOperation='screen';const g=gradient(-29,0,29,0,[[0,'#ffb77a00'],[.6,'#ff975a00'],[1,`rgba(255,162,97,${p.fire*.3})`]]);rect(-29,bodyH-100,58,85,g);ctx.globalCompositeOperation='source-over'}
+    drawPlume(bodyH+5,p,time);ctx.restore();
+  }
+  function drawSmoke(p,time){
+    const fade=smooth((p.p-.25)/.3)*(1-smooth((p.p-.85)/.15))*.55;
+    if(fade<.001)return;
+    ctx.save();for(let i=0;i<24;i++){const age=((time*.00005+seeded(i+800))%1),dir=i%2?1:-1,x=dir*(15+age*220)+seeded(i+801)*20,y=10-age*45+Math.sin(i)*12,rad=10+age*42;const g=ctx.createRadialGradient(x,y,0,x,y,rad);g.addColorStop(0,`rgba(182,164,147,${fade*(1-age)*.25})`);g.addColorStop(1,'rgba(182,164,147,0)');ctx.fillStyle=g;ctx.fillRect(x-rad,y-rad,rad*2,rad*2)}ctx.restore();
+  }
+  function drawScene(time){
+    const w=state.width,h=state.height,p=pose(state.time);ctx.setTransform(state.dpr,0,0,state.dpr,0,0);ctx.clearRect(0,0,w,h);drawSky(w,h,time);
+    const mobile=w<=700,scale=mobile?Math.min(w/670,.69):Math.min(w/1530,h/960)*1.02;
+    const originX=mobile?w*.54:w*.697,originY=mobile?808:h*.787;
+    ctx.save();ctx.translate(originX,originY);ctx.scale(scale*state.zoom,scale*state.zoom);ctx.translate(0,(state.zoom-1)*236/state.zoom);
+    drawGround();drawTower();drawArm(p,false);drawBooster(p,time);drawArm(p,true);drawSmoke(p,time);
+    // target guide: restrained technical annotation
+    ctx.globalAlpha=.6*(1-smooth((p.p-.73)/.12));ctx.setLineDash([4,6]);line(-85,-484,101,-484,'#c9d9df55',.7);ctx.setLineDash([]);line(93,-491,101,-484,'#b6cbd377');line(93,-477,101,-484,'#b6cbd377');ctx.globalAlpha=1;
+    ctx.restore();
+  }
+  const playPaths={play:'<path class="solid" d="m8 5 12 7-12 7z"/>',pause:'<path d="M8 5v14M16 5v14" stroke-width="3"/>'};
+  let prevStage=-1;
+  function updateUI(force=false){
+    const p=pose(state.time),pct=p.p*100;
+    $('progressFill').style.width=pct+'%';$('progressKnob').style.left=pct+'%';$('scrubber').value=state.time;
+    $('scrubber').setAttribute('aria-valuetext',(state.time/1000).toFixed(1)+' 秒，共 20 秒');
+    $('elapsed').textContent='00:'+String(Math.floor(state.time/1000)).padStart(2,'0');
+    $('altitude').textContent=Math.round(p.offset);$('velocity').textContent=p.velocity.toFixed(1);$('engineState').textContent=p.caught?'已关机':p.fire<.3?'关机中':'制动中';
+    document.querySelectorAll('.engine-dot').forEach(el=>el.classList.toggle('off',p.caught));
+    const stage=p.p<.35?0:p.p<.7?1:p.p<.9?2:3;
+    if(stage!==prevStage||force){const labels=[['返回 · 下降接近','CONTROLLED DESCENT'],['制动 · 精准对位','LANDING BURN'],['捕获 · 机械臂合拢','TOWER CAPTURE'],['完成 · 欢迎回家','WELCOME BACK']];$('statusText').textContent=labels[stage][0];$('statusEn').textContent=labels[stage][1];document.querySelectorAll('[data-time]').forEach((el,i)=>el.classList.toggle('current',i===stage));prevStage=stage}
+    $('statusLight').classList.toggle('caught',p.caught);$('completeBadge').classList.toggle('visible',p.caught);$('annotation').style.opacity=state.targetZoom>1?'0':'1';
+    $('playIcon').innerHTML=state.playing?playPaths.pause:playPaths.play;$('playBtn').setAttribute('aria-label',state.playing?'暂停动画':'播放动画');
+    $('heroPlay').querySelector('span').textContent=state.time>=duration?'再次重温捕获':'重温捕获瞬间';
+  }
+  function playPause(){if(state.time>=duration){state.time=0;state.playing=true}else state.playing=!state.playing;updateUI(true)}
+  function replay(){state.time=0;state.playing=true;state.last=performance.now();updateUI(true)}
+  $('playBtn').addEventListener('click',playPause);$('heroPlay').addEventListener('click',replay);$('replayBtn').addEventListener('click',replay);
+  $('scrubber').addEventListener('input',e=>{state.time=Number(e.target.value);updateUI(true)});
+  document.querySelectorAll('[data-time]').forEach(el=>el.addEventListener('click',()=>{state.time=Number(el.dataset.time);state.playing=true;updateUI(true)}));
+  $('speedBtn').addEventListener('click',()=>{const speeds=[1,.5,2];state.speed=speeds[(speeds.indexOf(state.speed)+1)%speeds.length];$('speedBtn').textContent=state.speed+'×';$('speedBtn').setAttribute('aria-label','播放速度 '+state.speed+' 倍')});
+  function view(close){state.targetZoom=close?1.38:1;$('closeBtn').classList.toggle('active',close);$('wideBtn').classList.toggle('active',!close);$('closeBtn').setAttribute('aria-pressed',close);$('wideBtn').setAttribute('aria-pressed',!close);updateUI(true)}
+  $('wideBtn').addEventListener('click',()=>view(false));$('closeBtn').addEventListener('click',()=>view(true));
+  function openAbout(){wasPlaying=state.playing;state.playing=false;updateUI(true);$('aboutDialog').showModal()}
+  let wasPlaying=false;$('aboutBtn').addEventListener('click',openAbout);$('detailsBtn').addEventListener('click',openAbout);document.querySelector('[data-close]').addEventListener('click',()=>$('aboutDialog').close());
+  $('aboutDialog').addEventListener('click',e=>{if(e.target===$('aboutDialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()}});
+  $('aboutDialog').addEventListener('close',()=>{state.playing=wasPlaying;state.last=performance.now();updateUI(true)});
+  let toastTimer;function toast(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2800)}
+  $('fullBtn').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if($('experience').requestFullscreen)await $('experience').requestFullscreen();else toast('当前浏览器不支持全屏，可横屏获得更宽视野。')}catch(e){toast('当前浏览器不支持全屏，可横屏获得更宽视野。')}});
+  document.addEventListener('fullscreenchange',()=>{$('fullBtn').setAttribute('aria-label',document.fullscreenElement?'退出全屏':'进入全屏');$('fullBtn').querySelector('span').textContent=document.fullscreenElement?'退出全屏':'全屏体验';resize()});
+  document.addEventListener('keydown',e=>{if($('aboutDialog').open||/INPUT|BUTTON|SELECT|TEXTAREA/.test(e.target.tagName)||e.altKey||e.ctrlKey||e.metaKey)return;if(e.code==='Space'){e.preventDefault();playPause()}if(e.code==='KeyR')replay();if(e.code==='ArrowRight'||e.code==='ArrowLeft'){e.preventDefault();state.time=clamp(state.time+(e.code==='ArrowRight'?1000:-1000),0,duration);updateUI(true)}});
+  document.querySelector('.wordmark').addEventListener('click',e=>{e.preventDefault();replay()});
+  document.addEventListener('visibilitychange',()=>{state.last=performance.now()});
+  function frame(now){const delta=Math.min(now-(state.last||now),60);state.last=now;if(state.playing&&!document.hidden){state.time=Math.min(duration,state.time+delta*state.speed);if(state.time>=duration)state.playing=false}state.zoom=mix(state.zoom,state.targetZoom,reduced?1:.05);drawScene(state.time);if(now-state.uiLast>90){updateUI();state.uiLast=now}requestAnimationFrame(frame)}
+  updateUI(true);requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
